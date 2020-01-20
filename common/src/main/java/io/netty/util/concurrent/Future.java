@@ -51,6 +51,9 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
      * specified listener is notified when this future is
      * {@linkplain #isDone() done}.  If this future is already
      * completed, the specified listener is notified immediately.
+     *
+     * 添加指定的listener。当future中当isDone()方法完成这个指定当listener就会收到通知
+     * 如果这个future已经完成了，这个指定的listener直接收到通知 观察者模式
      */
     Future<V> addListener(GenericFutureListener<? extends Future<? super V>> listener);
 
@@ -68,6 +71,8 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
      * future is {@linkplain #isDone() done}.  If the specified
      * listener is not associated with this future, this method
      * does nothing and returns silently.
+     *
+     * 移除最先发生的listener
      */
     Future<V> removeListener(GenericFutureListener<? extends Future<? super V>> listener);
 
@@ -83,6 +88,8 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
     /**
      * Waits for this future until it is done, and rethrows the cause of the failure if this future
      * failed.
+     *
+     * 等待future完成，并且如果失败重新抛出future失败的原因
      */
     Future<V> sync() throws InterruptedException;
 
@@ -156,6 +163,10 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
      *
      * As it is possible that a {@code null} value is used to mark the future as successful you also need to check
      * if the future is really done with {@link #isDone()} and not rely on the returned {@code null} value.
+     *
+     * 不阻塞的返回结果。如果future还没完成直接返回null。
+     * 有可能null值被用于标示future成功执行，所以你也需要检查isDone方法是否真正完成并且不要依赖于返回的null值
+     * 比如 Runnable永远返回一个null值
      */
     V getNow();
 

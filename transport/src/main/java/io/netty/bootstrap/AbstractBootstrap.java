@@ -48,6 +48,10 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * <p>When not used in a {@link ServerBootstrap} context, the {@link #bind()} methods are useful for connectionless
  * transports such as datagram (UDP).</p>
+ *
+ * AbstractBootstrap是一个辅助类来更好的启动引导一个channel。它支持方法链调用来更好的配置AbstractBootstrap。
+ * 当没有使用ServerBootstrap上下文时，bind方法对于无连接传输是很有用的，比如 UDP
+ * 此处泛型B C 都是在子类中传递而来
  */
 public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C extends Channel> implements Cloneable {
     @SuppressWarnings("unchecked")
@@ -79,6 +83,8 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
     /**
      * The {@link EventLoopGroup} which is used to handle all the events for the to-be-created
      * {@link Channel}
+     *
+     * 这个EventLoopGroup 去处理即将创建的channel的所有事件
      */
     public B group(EventLoopGroup group) {
         ObjectUtil.checkNotNull(group, "group");
@@ -98,6 +104,9 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
      * The {@link Class} which is used to create {@link Channel} instances from.
      * You either use this or {@link #channelFactory(io.netty.channel.ChannelFactory)} if your
      * {@link Channel} implementation has no no-args constructor.
+     *
+     * 传递进来的Class是用来创建Channel实例的涞源。通过反射
+     * 要么通过使用这个方法，要么你的Channel实现类没有无参构造器，那么你需要使用channelFactory方法
      */
     public B channel(Class<? extends C> channelClass) {
         return channelFactory(new ReflectiveChannelFactory<C>(
@@ -125,6 +134,10 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
      * is not working for you because of some more complex needs. If your {@link Channel} implementation
      * has a no-args constructor, its highly recommend to just use {@link #channel(Class)} to
      * simplify your code.
+     *
+     * ChannelFactory 被用来创建Channel子类实例，当调用这个类的bind方法时。
+     * 通常仅在channel(Class)由于一些复杂的需求而不能满足你的需要时才使用这个方法。
+     * 如果你的Channel实现类拥有无参构造方法，强烈建议只使用channel(Class)来简化你的代码。
      */
     @SuppressWarnings({ "unchecked", "deprecation" })
     public B channelFactory(io.netty.channel.ChannelFactory<? extends C> channelFactory) {
@@ -261,6 +274,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
     }
 
     private ChannelFuture doBind(final SocketAddress localAddress) {
+        // 初始化和注册
         final ChannelFuture regFuture = initAndRegister();
         final Channel channel = regFuture.channel();
         if (regFuture.cause() != null) {
@@ -299,6 +313,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
     final ChannelFuture initAndRegister() {
         Channel channel = null;
         try {
+            // 这里的 channelFactory 是 new ReflectiveChannelFactory<C> 得到的
             channel = channelFactory.newChannel();
             init(channel);
         } catch (Throwable t) {

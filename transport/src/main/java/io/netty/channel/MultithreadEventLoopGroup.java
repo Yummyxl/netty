@@ -34,9 +34,12 @@ public abstract class MultithreadEventLoopGroup extends MultithreadEventExecutor
 
     private static final InternalLogger logger = InternalLoggerFactory.getInstance(MultithreadEventLoopGroup.class);
 
+    // 默认循环组的线程数量
     private static final int DEFAULT_EVENT_LOOP_THREADS;
 
     static {
+        // 1 如果有io.netty.eventLoopThreads系统属性，则用1 和 io.netty.eventLoopThreads 的最大值
+        // 2 如果没有io.netty.eventLoopThreads系统属性，则取 1 和 可达cpu核心数的二倍
         DEFAULT_EVENT_LOOP_THREADS = Math.max(1, SystemPropertyUtil.getInt(
                 "io.netty.eventLoopThreads", NettyRuntime.availableProcessors() * 2));
 

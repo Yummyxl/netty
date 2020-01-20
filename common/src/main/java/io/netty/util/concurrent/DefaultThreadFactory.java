@@ -36,6 +36,7 @@ public class DefaultThreadFactory implements ThreadFactory {
     private final int priority;
     protected final ThreadGroup threadGroup;
 
+    // poolType 池类型
     public DefaultThreadFactory(Class<?> poolType) {
         this(poolType, false, Thread.NORM_PRIORITY);
     }
@@ -60,6 +61,7 @@ public class DefaultThreadFactory implements ThreadFactory {
         this(poolName, false, priority);
     }
 
+    // 池类型 是否daemon 线程优先级
     public DefaultThreadFactory(Class<?> poolType, boolean daemon, int priority) {
         this(toPoolName(poolType), daemon, priority);
     }

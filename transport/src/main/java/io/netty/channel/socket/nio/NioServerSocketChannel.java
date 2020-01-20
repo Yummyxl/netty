@@ -42,6 +42,8 @@ import java.util.Map;
 /**
  * A {@link io.netty.channel.socket.ServerSocketChannel} implementation which uses
  * NIO selector based implementation to accept new connections.
+ *
+ * 一个 io.netty.channel.socket.ServerSocketChannel 的实现，通过使用 基于NIO selector的实现类来接受新的请求
  */
 public class NioServerSocketChannel extends AbstractNioMessageChannel
                              implements io.netty.channel.socket.ServerSocketChannel {
@@ -58,6 +60,8 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
              *  {@link SelectorProvider#provider()} which is called by each ServerSocketChannel.open() otherwise.
              *
              *  See <a href="https://github.com/netty/netty/issues/2308">#2308</a>.
+             *
+             *  使用SelectorProvider开启一个SocketChannel然后删除SelectorProvider#provider()中的条件，被每一个ServerSocketChannel.open()调用的条件
              */
             return provider.openServerSocketChannel();
         } catch (IOException e) {

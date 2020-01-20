@@ -76,6 +76,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
             executor = new ThreadPerTaskExecutor(newDefaultThreadFactory());
         }
 
+        // 设置线程数数组
         children = new EventExecutor[nThreads];
 
         for (int i = 0; i < nThreads; i ++) {
@@ -153,6 +154,9 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
     /**
      * Create a new EventExecutor which will later then accessible via the {@link #next()}  method. This method will be
      * called for each thread that will serve this {@link MultithreadEventExecutorGroup}.
+     *
+     * 创建一个EventExecutor，稍后可以通过当前类的next方法访问。
+     * 这个方法将会被服务于MultithreadEventExecutorGroup的各个线程所调用。
      *
      */
     protected abstract EventExecutor newChild(Executor executor, Object... args) throws Exception;

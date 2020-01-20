@@ -23,6 +23,7 @@ import java.util.concurrent.locks.LockSupport;
 
 /**
  * Expose helper methods which create different {@link RejectedExecutionHandler}s.
+ * 公开辅助方法来创建不同的RejectedExecutionHandler
  */
 public final class RejectedExecutionHandlers {
     private static final RejectedExecutionHandler REJECT = new RejectedExecutionHandler() {
